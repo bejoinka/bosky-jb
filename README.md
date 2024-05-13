@@ -2,7 +2,7 @@
 
 Running the repo
 
-1. Copy the `.env.example` file to `.env.local` and add an API key for development (for the getPathways query)
+1. Copy the `.env.example` file to `.env.local` in the host directory and add an API key for development (for the getPathways query)
 
 2. Run the following commands in three terminal windows:
 
