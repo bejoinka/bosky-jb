@@ -18,3 +18,13 @@ $ cd host && npm i && npm run dev
 ```
 
 the extension component is rendered as part of the DOM inside the nextjs application, meaning there are no boundaries for CSS
+
+Your mission:
+
+- Understand how code works (eg the apollo client works (what is missing to make it work?))
+- Create a simple extension module that allows you to insert your name in a form and log the submission as a console log on host side
+- Review [this publicly available star wars schema](https://studio.apollographql.com/public/star-wars-swapi/variant/current/explorer) and find the starships query
+- Create a hook that queries the star wars api and gathers starships
+- Use no fewer than five of those starships in a select
+- Capture the selection
+- Log the submission in the host browser

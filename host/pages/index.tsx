@@ -13,7 +13,7 @@ const buttonStyle = {
   fontWeight: "700",
   padding: ".5rem 1rem .5rem 1rem",
   color: "rgb(24, 24, 24)",
-}
+};
 
 export default function Home() {
   const client = new ApolloClient({
