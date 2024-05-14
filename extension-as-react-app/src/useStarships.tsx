@@ -1,27 +1,24 @@
 import { gql, useQuery } from "@apollo/client";
 
 const STARSHIPS_QUERY = gql`
-query Pathways {
-  pathways(pagination: { offset: 0, count: 5 }) {
-    code
-    success
-    pathways {
-      id
-      title
+query AllStarships {
+  allStarships {
+    starships {
+      id,
+      name
     }
   }
-}
-`;
+}`;
 
-interface Pathway {
+interface Starship {
   id: string;
-  title: string;
+  name: string;
 }
 
 
 interface StarShipQueryResponse {
-  pathways: {
-    pathways: Pathway[];
+  allStarships: {
+    starships: Starship[];
   };
 }
 
@@ -33,6 +30,6 @@ export const useStarships = () => {
   return {
     loading,
     error,
-    pathways: data?.pathways?.pathways ?? ([] as Pathway[]),
+    starships: data?.allStarships?.starships ?? ([] as Starship[]),
   };
 };

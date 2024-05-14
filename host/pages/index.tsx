@@ -24,6 +24,11 @@ export default function Home() {
     },
   });
 
+  const starshipsApolloClient = new ApolloClient({
+    uri: "https://swapi-graphql.netlify.app/.netlify/functions/index",
+    cache: new InMemoryCache(),
+  });
+
   const [extensionName, _] = useState<string>("extension-one");
 
   return (
@@ -34,7 +39,9 @@ export default function Home() {
         <PathwayViewerComponent />
         <br></br>
         <hr />
-        <ExternalComponentLoader extensionName={extensionName} />
+        <ApolloProvider client={starshipsApolloClient} >
+          <ExternalComponentLoader extensionName={extensionName} />
+        </ApolloProvider>
       </ApolloProvider>
     </div>
   );

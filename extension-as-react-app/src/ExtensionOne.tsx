@@ -1,38 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useStarships } from "./useStarships";
-// import { useStarships } from "./useStarships";
 
 interface ExtensionOneProps {
   onComplete: (object: string) => void;
 }
 
+const minimumNumberOfStarshipSelectionsRequired = 5;
+
 const ExtensionOne: React.FC<ExtensionOneProps> = ({ onComplete }) => {
   const [name, setName] = useState<string>("");
-  const [selectedPathways, setSelectedPathways] = useState<string[]>([]); 
+  const [selectedStarships, setSelectedStarships] = useState<string[]>([]); 
+  const [validationError, setValidationError] = useState<string>("");
   const submitForm = () => {
+    if (selectedStarships.length < minimumNumberOfStarshipSelectionsRequired) {
+      setValidationError('Please select at least 5 starships');
+      return;      
+    }
     console.log(name);
-    console.log(selectedPathways);
-    onComplete({
-      name,
-      selectedPathways,
-    });
+    console.log(selectedStarships);
+    setValidationError('');
+    onComplete(
+      selectedStarships.join(','),
+    );
   };
   const updateName = (inputEvent: any) => {
     setName(inputEvent.target.value);
   };
+  
 
   const updateSelectedPathways = (inputEvent: any) => {
     const selectedValues = inputEvent.target.selectedOptions;
     const selectedValuesArr = Array.prototype.slice.call( selectedValues );
     console.log(selectedValues);
-    setSelectedPathways(selectedValuesArr.map((option: any) => option.value));
+    setSelectedStarships(selectedValuesArr.map((option: any) => option.value));
   }
  
-  const { loading, error, pathways } = useStarships();
+  const { loading, error, starships } = useStarships();
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
-  console.log(pathways);
 
   return (
     <div>
@@ -44,17 +50,19 @@ const ExtensionOne: React.FC<ExtensionOneProps> = ({ onComplete }) => {
         value={name}
         onChange={updateName}
       />
-      <br />
-      <label htmlFor="pathways">Pathways:</label>
-      <select name="pathways" id="pathways" onChange={updateSelectedPathways} multiple={true}>
-        {pathways.map((pathway) => (
-          <option key={pathway.id} value={pathway.id}>
-            {pathway.title}
+      <br /><br />
+      <label htmlFor="pathways">Starships:</label>
+      <select name="pathways" id="pathways" onChange={updateSelectedPathways} multiple={true} style={{ "color": "black" }}>
+        {starships.map((starship) => (
+          <option key={starship.id} value={starship.name}>
+            {starship.name}
           </option>
         ))}
       </select>
+      <br /> <br />
+      <span style={{ color: "red", fontSize: "0.8rem" }}>{validationError}</span>
       <br />
-      <button type="submit" onClick={submitForm}>
+      <button type="submit" onClick={submitForm} style={{ border: "1px solid white", fontSize: "1rem", padding: "5px" }} >
         Submit
       </button>
     </div>
