@@ -23,8 +23,8 @@ export const StarshipComponent: React.FC<StarshipComponentProps>  = ({onSelected
 
     return (
         <>
-        <label htmlFor="pathways">Starships:</label>
-        <select name="pathways" id="pathways" onChange={updatedSelectedStarships} multiple={true} style={{ "color": "black" }} >
+        <label htmlFor="starships">Starships:</label>
+        <select name="starships" id="starships" onChange={updatedSelectedStarships} multiple={true} style={{ "color": "black" }} >
           {starships.map((starship) => (
             <option key={starship.id} value={starship.name}>
               {starship.name}
