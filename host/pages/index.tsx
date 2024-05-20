@@ -24,6 +24,7 @@ export default function Home() {
     },
   });
 
+
   const [extensionName, _] = useState<string>("extension-one");
 
   return (
@@ -34,7 +35,7 @@ export default function Home() {
         <PathwayViewerComponent />
         <br></br>
         <hr />
-        <ExternalComponentLoader extensionName={extensionName} />
+          <ExternalComponentLoader extensionName={extensionName} />
       </ApolloProvider>
     </div>
   );
