@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { useStarships } from "./useStarships";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { StarshipComponent } from "./StarshipComponent";
 
 interface ExtensionOneProps {
   onComplete: (object: string) => void;
@@ -8,10 +9,16 @@ interface ExtensionOneProps {
 
 const minimumNumberOfStarshipSelectionsRequired = 5;
 
+const starshipsApolloClient = new ApolloClient({
+  uri: "https://swapi-graphql.netlify.app/.netlify/functions/index",
+  cache: new InMemoryCache(),
+});
+
 const ExtensionOne: React.FC<ExtensionOneProps> = ({ onComplete }) => {
   const [name, setName] = useState<string>("");
-  const [selectedStarships, setSelectedStarships] = useState<string[]>([]); 
+  const [selectedStarships, setSelectedStarships] = useState<string[]>([]);
   const [validationError, setValidationError] = useState<string>("");
+
   const submitForm = () => {
     if (selectedStarships.length < minimumNumberOfStarshipSelectionsRequired) {
       setValidationError('Please select at least 5 starships');
@@ -26,21 +33,11 @@ const ExtensionOne: React.FC<ExtensionOneProps> = ({ onComplete }) => {
   };
   const updateName = (inputEvent: any) => {
     setName(inputEvent.target.value);
-  };
-  
-
-  const updateSelectedPathways = (inputEvent: any) => {
-    const selectedValues = inputEvent.target.selectedOptions;
-    const selectedValuesArr = Array.prototype.slice.call( selectedValues );
-    console.log(selectedValues);
-    setSelectedStarships(selectedValuesArr.map((option: any) => option.value));
   }
  
-  const { loading, error, starships } = useStarships();
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error!</p>;
 
   return (
+    <ApolloProvider client={starshipsApolloClient}>
     <div>
       <h1 className="text-4xl my-4">Remote: Extension One</h1>
       <label>Name: </label>
@@ -51,14 +48,7 @@ const ExtensionOne: React.FC<ExtensionOneProps> = ({ onComplete }) => {
         onChange={updateName}
       />
       <br /><br />
-      <label htmlFor="pathways">Starships:</label>
-      <select name="pathways" id="pathways" onChange={updateSelectedPathways} multiple={true} style={{ "color": "black" }}>
-        {starships.map((starship) => (
-          <option key={starship.id} value={starship.name}>
-            {starship.name}
-          </option>
-        ))}
-      </select>
+      <StarshipComponent onSelectedStarships={setSelectedStarships} />
       <br /> <br />
       <span style={{ color: "red", fontSize: "0.8rem" }}>{validationError}</span>
       <br />
@@ -66,6 +56,7 @@ const ExtensionOne: React.FC<ExtensionOneProps> = ({ onComplete }) => {
         Submit
       </button>
     </div>
+    </ApolloProvider>
   );
 };
 export default ExtensionOne;
